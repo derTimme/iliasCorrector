@@ -11,18 +11,19 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')
 
 DEBUG = True
 SECRET_KEY = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-USERNAME = 'admin'
-PASSWORD = 'password'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
+app = Flask(__name__)
+
+
+@app.errorhandler(404)
 def err404(error):
     return render_template('error.html', error=error), 404
 
 
-app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.from_envvar('CORRECTOR_SETTINGS', silent=True)
-app.error_handler_spec[None][404] = err404
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
